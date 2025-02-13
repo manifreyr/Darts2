@@ -1,2 +1,2 @@
-# Darts2
+# Darts
 AMES dart scoring tracker - Kotlin
