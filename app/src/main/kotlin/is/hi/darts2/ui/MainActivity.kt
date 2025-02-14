@@ -13,11 +13,26 @@ class MainActivity : AppCompatActivity() {
         Network.init(applicationContext)
         setContentView(R.layout.activity_main)
 
-        // Load the initial fragment (e.g., StartFragment) if this is the first creation
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, StartFragment())
                 .commit()
+        }
+    }
+
+    fun onNavigationItemSelected(item: Int) {
+        when (item) {
+            1 -> { /* Navigate to screen 1 */
+            }
+
+            2 -> { /* Navigate to screen 2 */
+            }
+
+            3 -> { /* Navigate to screen 3 */
+            }
+
+            4 -> { /* Navigate to screen 4 */
+            }
         }
     }
 }
