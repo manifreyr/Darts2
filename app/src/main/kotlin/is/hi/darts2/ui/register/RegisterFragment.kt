@@ -9,10 +9,15 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import `is`.hi.darts2.R
 import `is`.hi.darts2.ui.login.LoginFragment
+import `is`.hi.darts2.viewmodel.RegisterViewModel
 
 class RegisterFragment : Fragment() {
+
+    // Obtain an instance of RegisterViewModel
+    private val registerViewModel: RegisterViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -47,14 +52,21 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Registration logic (e.g., API call) goes here.
-            Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT).show()
-
-            // Navigate to LoginFragment after successful registration
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, LoginFragment())
-                .addToBackStack(null)
-                .commit()
+            // Call the register method on your ViewModel
+            registerViewModel.register(email, username, password) { user ->
+                if (user != null) {
+                    Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT)
+                        .show()
+                    // Navigate to LoginFragment after a successful registration
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, LoginFragment())
+                        .addToBackStack(null)
+                        .commit()
+                } else {
+                    Toast.makeText(requireContext(), "Registration failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }
 
         ownAccountTextView.setOnClickListener {

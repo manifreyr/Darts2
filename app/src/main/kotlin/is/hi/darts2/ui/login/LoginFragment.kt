@@ -9,10 +9,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import `is`.hi.darts2.R
 import `is`.hi.darts2.ui.register.RegisterFragment
+import `is`.hi.darts2.viewmodel.LoginViewModel
 
 class LoginFragment : Fragment() {
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,14 +32,22 @@ class LoginFragment : Fragment() {
         val noAccountTextView = view.findViewById<TextView>(R.id.noAccountTextView)
 
         loginButton.setOnClickListener {
-            // Handle login logic (for now, display a toast)
-            val username = usernameEditText.text.toString().trim()
+            // Handle login logic using the ViewModel
+            val email = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT)
+                    .show()
             } else {
-                Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT).show()
-                // Proceed with login actions...
+                loginViewModel.login(email, password) { user ->
+                    if (user != null) {
+                        Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT)
+                            .show()
+                        // Proceed with further actions, e.g., navigate to a different fragment or activity
+                    } else {
+                        Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
