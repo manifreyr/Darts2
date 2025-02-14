@@ -21,7 +21,6 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the login layout
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
@@ -32,7 +31,6 @@ class LoginFragment : Fragment() {
         val noAccountTextView = view.findViewById<TextView>(R.id.noAccountTextView)
 
         loginButton.setOnClickListener {
-            // Handle login logic using the ViewModel
             val email = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
             if (email.isEmpty() || password.isEmpty()) {
@@ -43,7 +41,8 @@ class LoginFragment : Fragment() {
                     if (user != null) {
                         Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT)
                             .show()
-                        // Proceed with further actions, e.g., navigate to a different fragment or activity
+
+
                     } else {
                         Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show()
                     }
@@ -52,7 +51,6 @@ class LoginFragment : Fragment() {
         }
 
         noAccountTextView.setOnClickListener {
-            // Navigate to RegisterFragment when the text is clicked
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, RegisterFragment())
                 .addToBackStack(null)

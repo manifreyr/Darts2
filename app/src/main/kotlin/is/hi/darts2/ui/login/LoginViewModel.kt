@@ -12,10 +12,8 @@ class LoginViewModel(private val repository: UserRepository = UserRepository()) 
         viewModelScope.launch {
             val response = repository.login(email, password)
             if (response.isSuccessful) {
-                // Pass the retrieved user to your callback (or update LiveData)
                 onResult(response.body())
             } else {
-                // Handle error, for example by passing null or an error message
                 onResult(null)
             }
         }

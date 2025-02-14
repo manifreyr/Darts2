@@ -32,7 +32,6 @@ object Network {
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(CsrfInterceptor(cookieJar)) // Add our CSRF interceptor
             .addInterceptor(loggingInterceptor)
             .build()
 

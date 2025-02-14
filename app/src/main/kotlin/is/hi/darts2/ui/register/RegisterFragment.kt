@@ -52,12 +52,10 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Call the register method on your ViewModel
             registerViewModel.register(email, username, password) { user ->
                 if (user != null) {
                     Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT)
                         .show()
-                    // Navigate to LoginFragment after a successful registration
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, LoginFragment())
                         .addToBackStack(null)
@@ -70,7 +68,6 @@ class RegisterFragment : Fragment() {
         }
 
         ownAccountTextView.setOnClickListener {
-            // Navigate to LoginFragment when "Already have an account? Login" is clicked
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, LoginFragment())
                 .addToBackStack(null)
