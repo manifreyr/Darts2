@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import `is`.hi.darts2.R
+import `is`.hi.darts2.ui.home.HomeFragment
+import `is`.hi.darts2.ui.navigation.NavigationFragment
 import `is`.hi.darts2.ui.register.RegisterFragment
 import `is`.hi.darts2.viewmodel.LoginViewModel
 
@@ -41,8 +43,19 @@ class LoginFragment : Fragment() {
                     if (user != null) {
                         Toast.makeText(requireContext(), "Login successful", Toast.LENGTH_SHORT)
                             .show()
-
-
+                        // Navigate to HomeFragment, passing the user's username
+                        parentFragmentManager.beginTransaction()
+                            .replace(
+                                R.id.fragment_container,
+                                HomeFragment.newInstance(user.username)
+                            )
+                            .commit()
+                        parentFragmentManager.beginTransaction()
+                            .replace(
+                                R.id.navigation_container,
+                                NavigationFragment.newInstance()
+                            )
+                            .commit()
                     } else {
                         Toast.makeText(requireContext(), "Login failed", Toast.LENGTH_SHORT).show()
                     }
