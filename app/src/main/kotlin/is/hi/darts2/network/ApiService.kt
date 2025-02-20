@@ -1,5 +1,9 @@
 package `is`.hi.darts2.network
 
+import `is`.hi.darts2.model.FriendRequest
+import `is`.hi.darts2.model.Game
+import `is`.hi.darts2.model.GameInvite
+import `is`.hi.darts2.model.MessageResponse
 import `is`.hi.darts2.model.User
 import retrofit2.Response
 import retrofit2.http.Field
@@ -21,4 +25,51 @@ interface ApiService {
         @Field("username") username: String,
         @Field("password") password: String
     ): Response<User>
+
+    @FormUrlEncoded
+    @POST("player/friends/add")
+    suspend fun addFriend(
+        @Field("identifier") identifier: String
+    ): Response<MessageResponse>
+
+    @POST("player/friends/incoming")
+    suspend fun getIncomingFriendRequests(): Response<List<FriendRequest>>
+
+    @FormUrlEncoded
+    @POST("player/friends/requests/accept")
+    suspend fun acceptFriendRequest(
+        @Field("requestId") requestId: Long
+    ): Response<MessageResponse>
+
+    @FormUrlEncoded
+    @POST("player/friends/requests/decline")
+    suspend fun declineFriendRequest(
+        @Field("requestId") requestId: Long
+    ): Response<MessageResponse>
+
+    @POST("games/") // Adjust the endpoint path as needed.
+    suspend fun createNewGame(): Response<Game>
+
+
+    @POST("games/setup")
+    suspend fun getSetupGames(): Response<List<Game>>
+
+    @POST("games/ongoing")
+    suspend fun getOngoingGames(): Response<List<Game>>
+
+    @POST("games/invites")
+    suspend fun getGameInvites(): Response<List<GameInvite>>
+
+    @FormUrlEncoded
+    @POST("games/invites/accept")
+    suspend fun acceptGameInvite(
+        @Field("inviteId") inviteId: Long
+    ): Response<Game>
+
+    @FormUrlEncoded
+    @POST("games/invites/decline")
+    suspend fun declineGameInvite(
+        @Field("inviteId") inviteId: Long
+    ): Response<MessageResponse>
+
 }

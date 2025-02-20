@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="dark_grey">#424242</color>
+    <color name="light_grey">#616161</color>
     <color name="creamy_white">#FFFDD0</color>
     <color name="dart_green">#008000</color>
+    <color name="darker_creamy_white">#F8F2A3</color>
     <color name="dart_red">#FF0000</color>
 </resources>
