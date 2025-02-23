@@ -3,21 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/rounded_bg"
-    android:layout_marginBottom="8dp"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
-        android:id="@+id/gameDetailsTextView"
+        android:id="@+id/friendNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Ongoing game details"
-        android:textSize="18sp" />
+        android:text="Friend Name"
+        android:textSize="16sp" />
 
     <Button
-        android:id="@+id/continueButton"
+        android:id="@+id/inviteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Continue" />
+        android:text="Invite" />
 </LinearLayout>

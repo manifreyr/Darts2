@@ -14,9 +14,6 @@ class DashboardViewModel(
     private val gameRepository: GameRepository = GameRepository()
 ) : ViewModel() {
 
-    private val _createdGame = MutableLiveData<Game>()
-    val createdGame: LiveData<Game> = _createdGame
-
     private val _gameInvites = MutableLiveData<List<GameInvite>>()
     val gameInvites: LiveData<List<GameInvite>> = _gameInvites
 
@@ -26,6 +23,10 @@ class DashboardViewModel(
     private val _ongoingGames = MutableLiveData<List<Game>>()
     val ongoingGames: LiveData<List<Game>> = _ongoingGames
 
+    // Navigation event to indicate we should navigate to the game screen with a specific game ID.
+    private val _navigateToGameScreen = MutableLiveData<Long?>()
+    val navigateToGameScreen: LiveData<Long?> get() = _navigateToGameScreen
+
     fun createNewGame(onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             try {
@@ -33,8 +34,9 @@ class DashboardViewModel(
                 if (response.isSuccessful) {
                     val game = response.body()
                     if (game != null) {
-                        _createdGame.value = game
                         onResult(true, "Game created successfully")
+                        // Trigger navigation by posting the game ID.
+                        navigateToGameScreen(game.id)
                     } else {
                         onResult(false, "Game creation failed: empty response")
                     }
@@ -45,6 +47,14 @@ class DashboardViewModel(
                 onResult(false, "Exception: ${e.message}")
             }
         }
+    }
+
+    fun navigateToGameScreen(gameId: Long) {
+        _navigateToGameScreen.value = gameId
+    }
+
+    fun onSetupGameClicked(game: Game) {
+        navigateToGameScreen(game.id)
     }
 
     fun fetchGameInvites(onComplete: () -> Unit = {}) {
@@ -66,9 +76,17 @@ class DashboardViewModel(
             try {
                 val response = gameRepository.acceptGameInvite(inviteId)
                 if (response.isSuccessful) {
+                    // Remove the accepted invite from the list.
                     _gameInvites.value = _gameInvites.value?.filter { it.id != inviteId }
+                    // Get the game from the response.
+                    val game = response.body()
+                    if (game != null) {
+                        // Trigger navigation by posting the game ID.
+                        _navigateToGameScreen.value = game.id
+                    }
                 }
             } catch (e: Exception) {
+                // Handle exception if needed
             }
         }
     }
@@ -80,12 +98,13 @@ class DashboardViewModel(
                 if (response.isSuccessful) {
                     _gameInvites.value = _gameInvites.value?.filter { it.id != inviteId }
                 }
-            } catch (e: Exception) { /* Handle exception if needed */
+            } catch (e: Exception) {
+                // Handle exception if needed
             }
         }
     }
 
-    // Fetch setup games list for the current user
+    // Fetch setup games list for the current user.
     fun fetchSetupGames(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             try {
@@ -94,7 +113,7 @@ class DashboardViewModel(
                 _setupGames.value =
                     if (response.isSuccessful) response.body() ?: emptyList() else emptyList()
             } catch (e: Exception) {
-                Log.d("fetchSetupGames", "Error while getting setup games" + e.message)
+                Log.d("fetchSetupGames", "Error while getting setup games: " + e.message)
                 _setupGames.value = emptyList()
             } finally {
                 onComplete()
@@ -102,7 +121,7 @@ class DashboardViewModel(
         }
     }
 
-    // Fetch ongoing games list for the current user
+    // Fetch ongoing games list for the current user.
     fun fetchOngoingGames(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             try {
@@ -112,8 +131,16 @@ class DashboardViewModel(
             } catch (e: Exception) {
                 _ongoingGames.value = emptyList()
             } finally {
-                onComplete();
+                onComplete()
             }
         }
+    }
+
+    /**
+     * After the UI handles the navigation event, call this function to clear the event
+     * so it doesn't trigger navigation again after configuration changes.
+     */
+    fun clearNavigationEvent() {
+        _navigateToGameScreen.value = null
     }
 }

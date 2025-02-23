@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -21,7 +22,7 @@ class SetupGamesFragment : Fragment() {
     private lateinit var adapter: SetupGamesAdapter
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private val dashboardViewModel: DashboardViewModel by activityViewModels()
+    private val dashboardViewModel: DashboardViewModel by viewModels({ requireParentFragment() })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -34,11 +35,7 @@ class SetupGamesFragment : Fragment() {
         swipeRefreshLayout = view.findViewById(R.id.setupGamesContainer)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = SetupGamesAdapter { game: Game ->
-            Toast.makeText(
-                requireContext(),
-                "Opening setup for Game ${game.id}",
-                Toast.LENGTH_SHORT
-            ).show()
+            dashboardViewModel.onSetupGameClicked(game)
         }
         recyclerView.adapter = adapter
 

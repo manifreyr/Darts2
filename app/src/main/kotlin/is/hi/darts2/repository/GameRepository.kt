@@ -24,12 +24,20 @@ class GameRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun getGameInvites(): Response<List<GameInvite>> {
         return apiService.getGameInvites()
     }
-    
+
     suspend fun acceptGameInvite(inviteId: Long): Response<Game> {
         return apiService.acceptGameInvite(inviteId)
     }
 
     suspend fun declineGameInvite(inviteId: Long): Response<MessageResponse> {
         return apiService.declineGameInvite(inviteId)
+    }
+
+    suspend fun getGameById(gameId: Long): Response<Game> {
+        return apiService.getGameById(gameId)
+    }
+
+    suspend fun inviteFriendToGame(gameId: Long, friendId: Long): Response<MessageResponse> {
+        return apiService.inviteFriendToGame(gameId, friendId)
     }
 }

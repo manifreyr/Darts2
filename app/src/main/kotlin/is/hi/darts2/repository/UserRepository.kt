@@ -32,4 +32,8 @@ class UserRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun declineFriendRequest(requestId: Long): Response<MessageResponse> {
         return apiService.declineFriendRequest(requestId)
     }
+
+    suspend fun getFriends(): Response<List<User>> {
+        return apiService.getFriends()
+    }
 }

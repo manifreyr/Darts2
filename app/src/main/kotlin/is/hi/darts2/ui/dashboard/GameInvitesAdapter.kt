@@ -34,7 +34,7 @@ class GameInvitesAdapter(
         private val declineButton: Button = itemView.findViewById(R.id.declineButton)
 
         fun bind(invite: GameInvite) {
-            inviteDetailsTextView.text = "Invite from ${invite.userId}"
+            inviteDetailsTextView.text = "Invite from ${invite.inviterId}"
             acceptButton.setOnClickListener {
                 onAcceptClicked(invite)
             }

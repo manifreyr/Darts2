@@ -6,9 +6,12 @@ import `is`.hi.darts2.model.GameInvite
 import `is`.hi.darts2.model.MessageResponse
 import `is`.hi.darts2.model.User
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
     @FormUrlEncoded
@@ -72,4 +75,18 @@ interface ApiService {
         @Field("inviteId") inviteId: Long
     ): Response<MessageResponse>
 
+    @FormUrlEncoded
+    @POST("games/get")
+    suspend fun getGameById(
+        @Field("gameId") gameId: Long
+    ): Response<Game>
+
+    @GET("player/friends")
+    suspend fun getFriends(): Response<List<User>>
+
+    @POST("games/{gameId}/invite")
+    suspend fun inviteFriendToGame(
+        @Path("gameId") gameId: Long,
+        @Body friendId: Long
+    ): Response<MessageResponse>
 }

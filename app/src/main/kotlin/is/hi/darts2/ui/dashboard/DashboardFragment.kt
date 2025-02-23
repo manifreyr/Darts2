@@ -10,6 +10,8 @@ import com.google.android.material.tabs.TabLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import `is`.hi.darts2.R
+import `is`.hi.darts2.ui.game.GameFragment
+import `is`.hi.darts2.ui.game.setup.GameSetupFragment
 import `is`.hi.darts2.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
@@ -30,22 +32,26 @@ class DashboardFragment : Fragment() {
 
         startNewGameButton.setOnClickListener {
             dashboardViewModel.createNewGame { success, message ->
-                if (success) {
-                    val game = dashboardViewModel.createdGame.value
-                    if (game != null) {
-                        Toast.makeText(
-                            requireContext(),
-                            message ?: "Created game",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } else {
+                if (!success) {
                     Toast.makeText(
                         requireContext(),
                         message ?: "Failed to create game",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            }
+        }
+
+        dashboardViewModel.navigateToGameScreen.observe(viewLifecycleOwner) { gameId ->
+            gameId?.let {
+                // Navigate to the game screen, for instance:
+                val gameFragment = GameFragment.newInstance(it)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, gameFragment)
+                    .addToBackStack(null)
+                    .commit()
+                // Clear the event
+                dashboardViewModel.clearNavigationEvent()
             }
         }
 
