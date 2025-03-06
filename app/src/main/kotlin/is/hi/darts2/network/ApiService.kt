@@ -92,4 +92,13 @@ interface ApiService {
         @Path("gameId") gameId: Long,
         @Body friendId: Long
     ): Response<MessageResponse>
+
+
+    @GET("player/current")
+    suspend fun getCurrentUser(): Response<User>
+
+    @DELETE("player/friends/{friendId}/remove")
+    suspend fun removeFriend(
+        @Path("friendId") friendId: Long
+    ): Response<MessageResponse>
 }
