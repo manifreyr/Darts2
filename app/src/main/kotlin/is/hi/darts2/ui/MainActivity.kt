@@ -10,7 +10,6 @@ import `is`.hi.darts2.ui.navigation.NavigationFragment
 import android.util.Log
 import android.view.View
 import `is`.hi.darts2.ui.dashboard.DashboardFragment
-import `is`.hi.darts2.ui.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity(), NavigationFragment.NavigationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,9 +66,9 @@ class MainActivity : AppCompatActivity(), NavigationFragment.NavigationListener 
             }
 
             4 -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ProfileFragment())
-                    .commit()
+                // supportFragmentManager.beginTransaction()
+                //    .replace(R.id.fragment_container, ProfileFragment())
+                //    .commit()
             }
         }
     }
