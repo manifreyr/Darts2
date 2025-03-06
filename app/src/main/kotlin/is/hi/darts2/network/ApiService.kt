@@ -1,5 +1,6 @@
 package `is`.hi.darts2.network
 
+import android.os.Message
 import `is`.hi.darts2.model.FriendRequest
 import `is`.hi.darts2.model.Game
 import `is`.hi.darts2.model.GameInvite
@@ -7,11 +8,13 @@ import `is`.hi.darts2.model.MessageResponse
 import `is`.hi.darts2.model.User
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -88,5 +91,13 @@ interface ApiService {
     suspend fun inviteFriendToGame(
         @Path("gameId") gameId: Long,
         @Body friendId: Long
+    ): Response<MessageResponse>
+
+    @GET("player/current")
+    suspend fun getCurrentUser(): Response<User>
+
+    @DELETE("player/friends/{friendId}/remove")
+    suspend fun removeFriend(
+        @Path("friendId") friendId: Long
     ): Response<MessageResponse>
 }
