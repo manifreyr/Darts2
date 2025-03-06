@@ -36,12 +36,4 @@ class UserRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun getFriends(): Response<List<User>> {
         return apiService.getFriends()
     }
-
-    suspend fun getCurrentUser(): Response<User> {
-        return apiService.getCurrentUser()
-    }
-
-    suspend fun removeFriend(friendId: Long): Response<MessageResponse> {
-        return apiService.removeFriend(friendId)
-    }
 }
