@@ -74,4 +74,18 @@ class GameViewModel : ViewModel() {
             value = game.status
         }
     }
+    fun updateTotalLegs(totalLegs: Long) {
+        val gameId = _currentGame.value?.id ?: return
+        viewModelScope.launch {
+            try {
+                val response = gameRepository.updateTotalLegs(gameId, totalLegs)
+                if (response.isSuccessful) {
+                    //response.body()?.let { updatedGame ->
+                    //    _currentGame.value = updatedGame
+                    //}
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
 }

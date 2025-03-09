@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -47,6 +48,22 @@ class GameSetupFragment : Fragment() {
             }
         }
 
+        spinnerLegs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedLegsStr = parent.getItemAtPosition(position).toString()
+                val selectedLegs = selectedLegsStr.toLongOrNull()
+                selectedLegs?.let {
+                    gameViewModel.updateTotalLegs(it)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
         // Observe game info (players, game type, etc.)
         gameViewModel.currentGame.observe(viewLifecycleOwner) { game ->
             if (game != null) {
