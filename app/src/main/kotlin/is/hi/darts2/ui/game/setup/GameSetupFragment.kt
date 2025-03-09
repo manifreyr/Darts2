@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -45,6 +46,23 @@ class GameSetupFragment : Fragment() {
             friendsRecyclerView.adapter = FriendsAdapter { user ->
                 gameViewModel.inviteFriend(user.id)
             }
+        }
+
+        spinnerGameType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedGameTypeStr = parent.getItemAtPosition(position).toString()
+                val selectedGameType = selectedGameTypeStr.toLongOrNull()
+                selectedGameType?.let {
+                    gameViewModel.updateGameType(it)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         // Observe game info (players, game type, etc.)

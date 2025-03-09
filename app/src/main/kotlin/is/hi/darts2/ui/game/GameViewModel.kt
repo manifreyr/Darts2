@@ -74,4 +74,19 @@ class GameViewModel : ViewModel() {
             value = game.status
         }
     }
+
+    fun updateGameType(gameTypeValue: Long) {
+        val gameId = _currentGame.value?.id ?: return
+        viewModelScope.launch {
+            try {
+                val response = gameRepository.updateGameType(gameId, gameTypeValue)
+                if (response.isSuccessful) {
+                    //response.body()?.let { updatedGame ->
+                    //    _currentGame.value = updatedGame
+                    //}
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
 }

@@ -13,6 +13,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -101,4 +102,10 @@ interface ApiService {
     suspend fun removeFriend(
         @Path("friendId") friendId: Long
     ): Response<MessageResponse>
+
+    @PUT("games/{gameId}/gameType")
+    suspend fun updateGameType(
+        @Path("gameId") gameId: Long,
+        @Body gameTypeValue: Long
+    ): Response<Game>
 }

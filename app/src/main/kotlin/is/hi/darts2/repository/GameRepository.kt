@@ -40,4 +40,7 @@ class GameRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun inviteFriendToGame(gameId: Long, friendId: Long): Response<MessageResponse> {
         return apiService.inviteFriendToGame(gameId, friendId)
     }
+    suspend fun updateGameType(gameId: Long, gameTypeValue: Long): Response<Game> {
+        return apiService.updateGameType(gameId, gameTypeValue)
+    }
 }

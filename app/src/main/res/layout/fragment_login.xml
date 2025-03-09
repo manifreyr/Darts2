@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:layout_marginBottom="16dp"
-        android:hint="Username"
+        android:hint="Email"
         android:inputType="text" />
 
     <!-- Password Field -->
