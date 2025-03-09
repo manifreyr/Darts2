@@ -7,7 +7,6 @@
     android:background="@color/dart_green"
     android:padding="8dp">
 
-    <!-- Navigation Item 1 -->
     <ImageView
         android:id="@+id/nav_item1"
         android:layout_width="0dp"
@@ -20,7 +19,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Navigation Item 2 -->
     <ImageView
         android:id="@+id/nav_item2"
         android:layout_width="0dp"
@@ -33,12 +31,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/nav_item1" />
 
-    <!-- Navigation Item 3 -->
     <ImageView
         android:id="@+id/nav_item3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/profile"
+        android:src="@drawable/friends"
         android:padding="20dp"
         app:layout_constraintWidth_percent="0.25"
         app:layout_constraintDimensionRatio="1:1"
@@ -46,12 +43,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/nav_item2" />
 
-    <!-- Navigation Item 4 -->
     <ImageView
         android:id="@+id/nav_item4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/settings"
+        android:src="@drawable/profile"
         android:padding="20dp"
         app:layout_constraintWidth_percent="0.25"
         app:layout_constraintDimensionRatio="1:1"

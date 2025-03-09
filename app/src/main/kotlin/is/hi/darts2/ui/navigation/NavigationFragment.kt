@@ -10,21 +10,15 @@ import `is`.hi.darts2.R
 
 class NavigationFragment : Fragment() {
 
-
     companion object {
         fun newInstance(): NavigationFragment {
             return NavigationFragment().apply {
-                arguments = Bundle().apply {
-                }
+                arguments = Bundle()
             }
         }
     }
 
     interface NavigationListener {
-        /**
-         * Called when a navigation item is selected.
-         * @param item The selected item index (1 through 4)
-         */
         fun onNavigationItemSelected(item: Int)
     }
 

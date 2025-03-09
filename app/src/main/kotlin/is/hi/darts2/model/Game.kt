@@ -1,7 +1,5 @@
 package `is`.hi.darts2.model
 
-import java.time.LocalDateTime
-
 data class Game(
     val id: Long,
     val players: List<Player>,
@@ -9,7 +7,7 @@ data class Game(
     val legs: List<Leg>,
     val currentRound: Int,
     val gameType: String,
-    val date: LocalDateTime,
+    val date: String,
     val isPaused: Boolean,
     val status: GameStatus,
     val currentPlayerIndex: Int,
