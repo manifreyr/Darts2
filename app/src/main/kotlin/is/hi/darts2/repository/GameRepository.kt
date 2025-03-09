@@ -43,4 +43,7 @@ class GameRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun updateTotalLegs(gameId: Long, totalLegs: Long): Response<Game> {
         return apiService.updateTotalLegs(gameId, totalLegs)
     }
+    suspend fun updateGameType(gameId: Long, gameTypeValue: Long): Response<Game> {
+        return apiService.updateGameType(gameId, gameTypeValue)
+    }
 }

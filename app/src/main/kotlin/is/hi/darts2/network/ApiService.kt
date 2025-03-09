@@ -110,4 +110,10 @@ interface ApiService {
     ): Response<Game>
 
 
+
+    @PUT("games/{gameId}/gameType")
+    suspend fun updateGameType(
+        @Path("gameId") gameId: Long,
+        @Body gameTypeValue: Long
+    ): Response<Game>
 }

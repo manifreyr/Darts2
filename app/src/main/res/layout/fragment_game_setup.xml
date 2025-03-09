@@ -27,6 +27,7 @@
         android:id="@+id/spinnerGameType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:entries="@array/game_types"
         android:layout_marginBottom="16dp" />
 
     <!-- Number of Legs Dropdown -->
