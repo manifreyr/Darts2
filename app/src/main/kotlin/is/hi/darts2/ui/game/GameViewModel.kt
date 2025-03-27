@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import `is`.hi.darts2.model.Game
 import `is`.hi.darts2.model.GameStatus
 import `is`.hi.darts2.model.User
+import `is`.hi.darts2.network.Network
 import `is`.hi.darts2.repository.GameRepository
 import `is`.hi.darts2.repository.UserRepository
 import kotlinx.coroutines.launch
+import okhttp3.WebSocket
 
 class GameViewModel : ViewModel() {
     // Holds the current game.
@@ -23,6 +25,12 @@ class GameViewModel : ViewModel() {
     val currentUser: LiveData<User> get() = _currentUser
 
     val friendsList = MutableLiveData<List<User>>()
+
+    private var webSocket: WebSocket? = null
+
+    init {
+        initWebSocket()
+    }
 
     fun fetchFriends() {
         viewModelScope.launch {
@@ -134,5 +142,30 @@ class GameViewModel : ViewModel() {
                 // Handle error.
             }
         }
+    }
+
+    private fun initWebSocket() {
+        webSocket = Network.createGameWebSocket { message ->
+            viewModelScope.launch {
+                try {
+                    if (message == "GAME_UPDATED" && _gameId != null) {
+                        fetchGame(_gameId!!)
+                    } else {
+                        val gameIdFromMessage = message.toLongOrNull()
+                        if (gameIdFromMessage != null) {
+                            fetchGame(gameIdFromMessage)
+                        }
+                    }
+                } catch (e: Exception) {
+                    // Log or handle the error as necessary.
+                }
+            }
+        }
+    }
+
+    override fun onCleared() {
+        // Close the websocket when the ViewModel is cleared to avoid memory leaks.
+        webSocket?.close(1000, "ViewModel destroyed")
+        super.onCleared()
     }
 }
