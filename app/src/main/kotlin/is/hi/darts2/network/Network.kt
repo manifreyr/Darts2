@@ -1,5 +1,6 @@
 package `is`.hi.darts2.network
 
+import GameWebSocketListener
 import android.content.Context
 import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
@@ -14,7 +15,8 @@ import okhttp3.WebSocket
 
 object Network {
     private const val BASE_URL = "http://10.0.2.2:8081/"
-    private const val WEBSOCKET_URL = "ws://10.0.2.2:8081/game-websocket/topic/game-updates"
+
+    private const val WEBSOCKET_BASE_URL = "ws://10.0.2.2:8081/game-websocket/"
 
     private lateinit var cookieJar: PersistentCookieJar
     private lateinit var client: OkHttpClient
@@ -24,10 +26,7 @@ object Network {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    /**
-     * Initialize the network client.
-     * Call this method in your Application.onCreate() and pass the application context.
-     */
+
     fun init(context: Context) {
         cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
         client = OkHttpClient.Builder()
@@ -49,8 +48,16 @@ object Network {
         retrofit.create(ApiService::class.java)
     }
 
+    /**
+     * Creates a websocket connection for game updates.
+     * The URL is constructed to include the current user id.
+     *
+     * @param onMessageReceived Callback invoked when a message is received.
+     * @return A [WebSocket] instance.
+     */
     fun createGameWebSocket(onMessageReceived: (String) -> Unit): WebSocket {
-        val request = Request.Builder().url(WEBSOCKET_URL).build()
+        val url = WEBSOCKET_BASE_URL
+        val request = Request.Builder().url(url).build()
         val listener = GameWebSocketListener(onMessageReceived)
         return client.newWebSocket(request, listener)
     }

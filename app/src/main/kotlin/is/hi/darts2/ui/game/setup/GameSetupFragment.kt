@@ -60,8 +60,13 @@ class GameSetupFragment : Fragment() {
             ) {
                 val selectedLegsStr = parent.getItemAtPosition(position).toString()
                 val selectedLegs = selectedLegsStr.toLongOrNull()
-                selectedLegs?.let {
-                    gameViewModel.updateTotalLegs(it)
+                if (2 == gameViewModel.fetchingGame) {
+                    selectedLegs?.let {
+                        gameViewModel.updateTotalLegs(it)
+                    }
+                    gameViewModel.fetchingGame = 0
+                } else {
+                    gameViewModel.fetchingGame++
                 }
             }
 
@@ -76,8 +81,13 @@ class GameSetupFragment : Fragment() {
             ) {
                 val selectedGameTypeStr = parent.getItemAtPosition(position).toString()
                 val selectedGameType = selectedGameTypeStr.toLongOrNull()
-                selectedGameType?.let {
-                    gameViewModel.updateGameType(it)
+                if (2 == gameViewModel.fetchingGame) {
+                    selectedGameType?.let {
+                        gameViewModel.updateGameType(it)
+                    }
+                    gameViewModel.fetchingGame = 0
+                } else {
+                    gameViewModel.fetchingGame++
                 }
             }
 

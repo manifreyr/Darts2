@@ -1,5 +1,6 @@
 package `is`.hi.darts2.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,11 @@ import `is`.hi.darts2.repository.GameRepository
 import `is`.hi.darts2.repository.UserRepository
 import kotlinx.coroutines.launch
 import okhttp3.WebSocket
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompMessage
+
 
 class GameViewModel : ViewModel() {
     // Holds the current game.
@@ -21,6 +27,8 @@ class GameViewModel : ViewModel() {
     val currentGame: LiveData<Game> = _currentGame
     private var _gameId: Long? = null
 
+    var fetchingGame = 0
+
     private val _currentUser = MutableLiveData<User>()
     val currentUser: LiveData<User> get() = _currentUser
 
@@ -28,8 +36,14 @@ class GameViewModel : ViewModel() {
 
     private var webSocket: WebSocket? = null
 
+    private lateinit var stompClient: StompClient
+
     init {
-        initWebSocket()
+        _currentUser.observeForever { user ->
+            if (user != null) {
+                connectStomp(user.id.toString())
+            }
+        }
     }
 
     fun fetchFriends() {
@@ -55,7 +69,6 @@ class GameViewModel : ViewModel() {
                     }
                 }
             } catch (e: Exception) {
-                // Handle the error.
             }
         }
     }
@@ -65,26 +78,16 @@ class GameViewModel : ViewModel() {
     }
 
     fun fetchGame(gameId: Long) {
-        // Use your preferred async method. For example, using Coroutines:
         viewModelScope.launch {
             try {
                 val game = gameRepository.getGameById(gameId)
+                fetchingGame = 0
                 _currentGame.value = game.body()
             } catch (e: Exception) {
-                // Handle error, e.g., post a null value or update an error LiveData
             }
         }
     }
 
-    fun updateGame(game: Game) {
-        _currentGame.value = game
-    }
-
-    val gameStatus: LiveData<GameStatus> = MutableLiveData<GameStatus>().apply {
-        _currentGame.observeForever { game ->
-            value = game.status
-        }
-    }
 
     fun updateTotalLegs(totalLegs: Long) {
         val gameId = _currentGame.value?.id ?: return
@@ -107,7 +110,6 @@ class GameViewModel : ViewModel() {
             try {
                 val response = gameRepository.startGame(gameId)
                 if (response.isSuccessful) {
-                    fetchGame(gameId)
                 }
             } catch (e: Exception) {
             }
@@ -120,9 +122,6 @@ class GameViewModel : ViewModel() {
             try {
                 val response = gameRepository.updateGameType(gameId, gameTypeValue)
                 if (response.isSuccessful) {
-                    //response.body()?.let { updatedGame ->
-                    //    _currentGame.value = updatedGame
-                    //}
                 }
             } catch (e: Exception) {
             }
@@ -139,33 +138,73 @@ class GameViewModel : ViewModel() {
                     }
                 }
             } catch (e: Exception) {
-                // Handle error.
             }
         }
     }
 
-    private fun initWebSocket() {
+    private fun initWebSocket(userId: String) {
         webSocket = Network.createGameWebSocket { message ->
             viewModelScope.launch {
                 try {
+                    // If the message is a simple flag "GAME_UPDATED", use your stored _gameId.
                     if (message == "GAME_UPDATED" && _gameId != null) {
                         fetchGame(_gameId!!)
-                    } else {
-                        val gameIdFromMessage = message.toLongOrNull()
-                        if (gameIdFromMessage != null) {
-                            fetchGame(gameIdFromMessage)
-                        }
                     }
                 } catch (e: Exception) {
-                    // Log or handle the error as necessary.
                 }
             }
         }
     }
 
+    fun connectStomp(userId: String) {
+        val url = "ws://10.0.2.2:8081/game-websocket"
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+
+        // Observe the lifecycle events of the STOMP client
+        stompClient.lifecycle().subscribe({ lifecycleEvent ->
+            when (lifecycleEvent.type) {
+                LifecycleEvent.Type.OPENED -> {
+                    Log.d("Stomp", "Stomp connection opened")
+                    // Now that we're connected, subscribe to the topic specific to this user.
+                    subscribeToUserTopic(userId)
+                }
+
+                LifecycleEvent.Type.ERROR -> {
+                    Log.e("Stomp", "Stomp connection error", lifecycleEvent.exception)
+                }
+
+                LifecycleEvent.Type.CLOSED -> {
+                    Log.d("Stomp", "Stomp connection closed")
+                }
+
+                else -> {}
+            }
+        }, { error ->
+            Log.e("Stomp", "Lifecycle subscription error", error)
+        })
+
+        stompClient.connect()
+    }
+
+    private fun subscribeToUserTopic(userId: String) {
+        // Subscribe to the topic with the user ID in the destination.
+        // For example, messages will be sent to "/topic/game-updates/{userId}".
+        stompClient.topic("/topic/game-updates/$userId")
+            .subscribe({ stompMessage: StompMessage ->
+                Log.d("Stomp", "Received message: ${stompMessage.payload}")
+                // Process the message as needed, e.g. update the game.
+
+                if (stompMessage.payload == "GAME_UPDATED" && _gameId != null) {
+                    fetchGame(_gameId!!)
+                }
+            }, { error ->
+                Log.e("Stomp", "Error in topic subscription", error)
+            })
+    }
+
+
     override fun onCleared() {
-        // Close the websocket when the ViewModel is cleared to avoid memory leaks.
-        webSocket?.close(1000, "ViewModel destroyed")
+        stompClient.disconnect()
         super.onCleared()
     }
 }
