@@ -33,6 +33,7 @@ class GameFragment : Fragment() {
                 gameViewModel.setGameId(gameId)
                 gameViewModel.fetchGame(gameId)
             }
+            gameViewModel.fetchCurrentUser();
         }
     }
 

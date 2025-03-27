@@ -19,6 +19,9 @@ class GameViewModel : ViewModel() {
     val currentGame: LiveData<Game> = _currentGame
     private var _gameId: Long? = null
 
+    private val _currentUser = MutableLiveData<User>()
+    val currentUser: LiveData<User> get() = _currentUser
+
     val friendsList = MutableLiveData<List<User>>()
 
     fun fetchFriends() {
@@ -74,6 +77,7 @@ class GameViewModel : ViewModel() {
             value = game.status
         }
     }
+
     fun updateTotalLegs(totalLegs: Long) {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -83,6 +87,19 @@ class GameViewModel : ViewModel() {
                     //response.body()?.let { updatedGame ->
                     //    _currentGame.value = updatedGame
                     //}
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    fun startGame() {
+        val gameId = _currentGame.value?.id ?: return
+        viewModelScope.launch {
+            try {
+                val response = gameRepository.startGame(gameId)
+                if (response.isSuccessful) {
+                    fetchGame(gameId)
                 }
             } catch (e: Exception) {
             }
@@ -100,6 +117,21 @@ class GameViewModel : ViewModel() {
                     //}
                 }
             } catch (e: Exception) {
+            }
+        }
+    }
+
+    fun fetchCurrentUser() {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.getCurrentUser()
+                if (response.isSuccessful) {
+                    response.body()?.let { user ->
+                        _currentUser.value = user
+                    }
+                }
+            } catch (e: Exception) {
+                // Handle error.
             }
         }
     }

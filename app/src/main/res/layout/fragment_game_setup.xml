@@ -3,6 +3,7 @@
     android:id="@+id/fragment_game_setup_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/creamy_white"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -83,4 +84,14 @@
             android:clipToPadding="false" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Game"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:backgroundTint="@color/dart_green"
+        android:textColor="@color/creamy_white" />
 </LinearLayout>

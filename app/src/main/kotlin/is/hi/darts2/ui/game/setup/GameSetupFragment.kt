@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -32,6 +34,8 @@ class GameSetupFragment : Fragment() {
         val friendsRecyclerView = view.findViewById<RecyclerView>(R.id.friendsRecyclerView)
         val friendsSwipeRefresh = view.findViewById<SwipeRefreshLayout>(R.id.friendsSwipeRefresh)
         val gameTypeTextView = view.findViewById<TextView>(R.id.gameTypeLabel)
+        val startGameButton = view.findViewById<Button>(R.id.startGameButton)
+
 
         // Setup LayoutManagers.
         playersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -78,6 +82,10 @@ class GameSetupFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        startGameButton.setOnClickListener {
+            gameViewModel.startGame()
         }
 
         // Observe game info (players, game type, etc.)

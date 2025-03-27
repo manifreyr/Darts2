@@ -34,12 +34,7 @@ class OngoingGamesFragment : Fragment() {
         adapter = OngoingGamesAdapter(
             // Placeholder
             onContinueClicked = { game: Game ->
-                Toast.makeText(
-                    requireContext(),
-                    "Continuing Game ${game.id}",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
+                dashboardViewModel.navigateToGameScreen(game.id)
             }
         )
         recyclerView.adapter = adapter
