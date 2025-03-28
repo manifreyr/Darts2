@@ -119,4 +119,10 @@ interface ApiService {
     suspend fun startGame(
         @Path("gameId") gameId: Long
     ): Response<MessageResponse>
+
+    @POST("games/{gameId}/stats")
+    suspend fun displayStats(
+        @Path("gameId") gameId: Long
+    ): Response<MessageResponse>
+
 }

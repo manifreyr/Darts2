@@ -135,4 +135,67 @@ class GameViewModel : ViewModel() {
             }
         }
     }
+
+    fun displayStats() {
+        val gameId = _currentGame.value?.id ?: return
+        viewModelScope.launch {
+            try {
+                val response = gameRepository.displayStats(gameId)
+                if (response.isSuccessful) {
+
+                    //_gameStats.value = response.body()
+                } else {
+                  //  _gameStats.value = null
+                }
+            } catch (e: Exception) {
+                // error
+            }
+        }
+    }
+
+
+    fun getBestLegForPlayer(playerId: Long): Long {
+        val game = _currentGame.value ?: return 0
+        return game.legs.filter { it.winnerPlayerId == playerId }
+            .minOfOrNull { leg ->
+                val startIndex = leg.startIndex
+                val endIndex = leg.endIndex ?: return@minOfOrNull Long.MAX_VALUE
+                game.rounds
+                    .subList(startIndex, endIndex + 1)
+                    .count { it.playerId == playerId } * 3L
+            } ?: 0
+    }
+
+    fun getWorstLegForPlayer(playerId: Long): Long {
+        val game = _currentGame.value ?: return 0
+        return game.legs.filter { it.winnerPlayerId == playerId }
+            .maxOfOrNull { leg ->
+                val startIndex = leg.startIndex
+                val endIndex = leg.endIndex ?: return@maxOfOrNull Long.MIN_VALUE
+                game.rounds
+                    .subList(startIndex, endIndex + 1)
+                    .count { it.playerId == playerId } * 3L
+            } ?: 0
+    }
+
+    fun getHighestScoreForPlayer(playerId: Long): Int {
+        val game = _currentGame.value ?: return 0
+        return game.rounds.filter { it.playerId == playerId }
+            .maxOfOrNull { it.playerScore } ?: 0
+    }
+
+    fun getGameFirst9Average(playerId: Long): Double {
+        val game = _currentGame.value ?: return 0.0
+        val first3Rounds = game.rounds.filter { it.playerId == playerId }.take(3)
+        val totalScore = first3Rounds.sumOf { it.playerScore.toDouble() }
+        return if (first3Rounds.isNotEmpty()) totalScore / first3Rounds.size else 0.0
+    }
+
+    fun getGameThreeDartAverage(playerId: Long): Double {
+        val game = _currentGame.value ?: return 0.0
+        val playerRounds = game.rounds.filter { it.playerId == playerId }
+        val totalScore = playerRounds.sumOf { it.playerScore.toDouble() }
+        val totalRounds = playerRounds.size
+        return if (totalRounds > 0) totalScore / totalRounds else 0.0
+    }
 }
