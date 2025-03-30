@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import `is`.hi.darts2.model.Game
 import `is`.hi.darts2.model.User
-import `is`.hi.darts2.network.Network
 import `is`.hi.darts2.repository.GameRepository
 import `is`.hi.darts2.repository.UserRepository
 import kotlinx.coroutines.launch
@@ -32,8 +31,6 @@ class GameViewModel : ViewModel() {
     val currentUser: LiveData<User> get() = _currentUser
 
     val friendsList = MutableLiveData<List<User>>()
-
-    private var webSocket: WebSocket? = null
 
     private lateinit var stompClient: StompClient
 
@@ -141,23 +138,6 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun displayStats() {
-        val gameId = _currentGame.value?.id ?: return
-        viewModelScope.launch {
-            try {
-                val response = gameRepository.displayStats(gameId)
-                if (response.isSuccessful) {
-
-                    //_gameStats.value = response.body()
-                } else {
-                  //  _gameStats.value = null
-                }
-            } catch (e: Exception) {
-                // error
-            }
-        }
-    }
-
 
     fun getBestLegForPlayer(playerId: Long): Long {
         val game = _currentGame.value ?: return 0
@@ -204,26 +184,12 @@ class GameViewModel : ViewModel() {
         return if (totalRounds > 0) totalScore / totalRounds else 0.0
     }
 
-    private fun initWebSocket(userId: String) {
-        webSocket = Network.createGameWebSocket { message ->
-            viewModelScope.launch {
-                try {
-                    // If the message is a simple flag "GAME_UPDATED", use your stored _gameId.
-                    if (message == "GAME_UPDATED" && _gameId != null) {
-                        fetchGame(_gameId!!)
-                    }
-                } catch (e: Exception) {
-                }
-            }
-        }
-    }
-
     fun connectStomp(userId: String) {
         val url = "ws://10.0.2.2:8081/game-websocket"
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
         // Observe the lifecycle events of the STOMP client
-        stompClient.lifecycle().subscribe({ lifecycleEvent ->
+        val subscribe = stompClient.lifecycle().subscribe({ lifecycleEvent ->
             when (lifecycleEvent.type) {
                 LifecycleEvent.Type.OPENED -> {
                     Log.d("Stomp", "Stomp connection opened")
@@ -250,12 +216,9 @@ class GameViewModel : ViewModel() {
 
     private fun subscribeToUserTopic(userId: String) {
         // Subscribe to the topic with the user ID in the destination.
-        // For example, messages will be sent to "/topic/game-updates/{userId}".
-        stompClient.topic("/topic/game-updates/$userId")
+        val subscribe = stompClient.topic("/topic/game-updates/$userId")
             .subscribe({ stompMessage: StompMessage ->
                 Log.d("Stomp", "Received message: ${stompMessage.payload}")
-                // Process the message as needed, e.g. update the game.
-
                 if (stompMessage.payload == "GAME_UPDATED" && _gameId != null) {
                     fetchGame(_gameId!!)
                 }
