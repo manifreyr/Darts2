@@ -1,4 +1,4 @@
-package `is`.hi.darts2.viewmodel
+package `is`.hi.darts2.ui.game
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import `is`.hi.darts2.model.Game
-import `is`.hi.darts2.model.GameStatus
 import `is`.hi.darts2.model.User
 import `is`.hi.darts2.network.Network
 import `is`.hi.darts2.repository.GameRepository

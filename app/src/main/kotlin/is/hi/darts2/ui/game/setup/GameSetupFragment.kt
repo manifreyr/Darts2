@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import `is`.hi.darts2.viewmodel.GameViewModel
+import `is`.hi.darts2.ui.game.GameViewModel
 import `is`.hi.darts2.R
 
 class GameSetupFragment : Fragment() {
