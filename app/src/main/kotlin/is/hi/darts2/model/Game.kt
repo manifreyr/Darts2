@@ -8,7 +8,7 @@ data class Game(
     val currentRound: Int,
     val gameType: String,
     val date: String,
-    val isPaused: Boolean,
+    val paused: Boolean,
     val status: GameStatus,
     val currentPlayerIndex: Int,
     val totalLegs: Long

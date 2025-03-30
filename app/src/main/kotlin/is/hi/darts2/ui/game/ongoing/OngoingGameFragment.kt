@@ -51,5 +51,18 @@ class OngoingGameFragment : Fragment() {
                 }
             }
         }
+
+        submitScoreButton.setOnClickListener {
+            // Get the score input as a string, trim any extra spaces.
+            val scoreText = scoreInputEditText.text.toString().trim()
+            if (scoreText.isNotEmpty()) {
+                val score = scoreText.toLongOrNull()
+                if (score != null) {
+                    gameViewModel.submitThrow(score)
+                } else {
+                    // Handle invalid input (e.g. show a toast for non-numeric input)
+                }
+            }
+        }
     }
 }

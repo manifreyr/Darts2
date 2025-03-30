@@ -52,4 +52,8 @@ class GameRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun startGame(gameId: Long): Response<MessageResponse> {
         return apiService.startGame(gameId)
     }
+
+    suspend fun submitThrow(gameId: Long, score: Long): Response<MessageResponse> {
+        return apiService.submitThrow(gameId, score)
+    }
 }

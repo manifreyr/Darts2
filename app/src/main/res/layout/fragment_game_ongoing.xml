@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/creamy_white"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -76,8 +77,13 @@
     <!-- Submit Button -->
     <Button
         android:id="@+id/submitScoreButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit Score" />
+        android:text="Submit Score"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:backgroundTint="@color/dart_green"
+        android:textColor="@color/creamy_white" />
 
 </LinearLayout>

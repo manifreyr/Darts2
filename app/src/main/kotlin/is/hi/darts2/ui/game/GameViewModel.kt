@@ -100,6 +100,23 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun submitThrow(score: Long) {
+        val gameId = _currentGame.value?.id ?: return
+        viewModelScope.launch {
+            try {
+                val response = gameRepository.submitThrow(gameId, score)
+                if (response.isSuccessful) {
+                    //response.body()?.let { updatedGame ->
+                    //    _currentGame.value = updatedGame
+                    //}
+                } else {
+                    // TODO: display error message
+                }
+            } catch (e: Exception) {
+            }
+        }
+    }
+
     fun startGame() {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -141,14 +158,13 @@ class GameViewModel : ViewModel() {
 
     fun getBestLegForPlayer(playerId: Long): Long {
         val game = _currentGame.value ?: return 0
-        return game.legs.filter { it.winnerPlayerId == playerId }
-            .minOfOrNull { leg ->
-                val startIndex = leg.startIndex
-                val endIndex = leg.endIndex ?: return@minOfOrNull Long.MAX_VALUE
-                game.rounds
-                    .subList(startIndex, endIndex + 1)
-                    .count { it.playerId == playerId } * 3L
-            } ?: 0
+        return game.legs.minOfOrNull { leg ->
+            val startIndex = leg.startIndex
+            val endIndex = leg.endIndex ?: return@minOfOrNull Long.MAX_VALUE
+            game.rounds
+                .subList(startIndex, endIndex + 1)
+                .count { it.playerId == playerId } * 3L
+        } ?: 0
     }
 
     fun getWorstLegForPlayer(playerId: Long): Long {
@@ -188,12 +204,10 @@ class GameViewModel : ViewModel() {
         val url = "ws://10.0.2.2:8081/game-websocket"
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
-        // Observe the lifecycle events of the STOMP client
         val subscribe = stompClient.lifecycle().subscribe({ lifecycleEvent ->
             when (lifecycleEvent.type) {
                 LifecycleEvent.Type.OPENED -> {
                     Log.d("Stomp", "Stomp connection opened")
-                    // Now that we're connected, subscribe to the topic specific to this user.
                     subscribeToUserTopic(userId)
                 }
 
@@ -215,7 +229,6 @@ class GameViewModel : ViewModel() {
     }
 
     private fun subscribeToUserTopic(userId: String) {
-        // Subscribe to the topic with the user ID in the destination.
         val subscribe = stompClient.topic("/topic/game-updates/$userId")
             .subscribe({ stompMessage: StompMessage ->
                 Log.d("Stomp", "Received message: ${stompMessage.payload}")
@@ -227,7 +240,7 @@ class GameViewModel : ViewModel() {
             })
     }
 
-
+    // Cleanup for websockets
     override fun onCleared() {
         stompClient.disconnect()
         super.onCleared()

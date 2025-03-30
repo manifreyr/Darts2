@@ -40,6 +40,8 @@
             android:textSize="18sp" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text=" | "
             android:textSize="18sp" />
 
@@ -66,34 +68,106 @@
         android:layout_marginBottom="24dp">
 
         <TableRow>
-            <TextView android:text="Username" android:padding="8dp" android:textStyle="bold" />
-            <TextView android:text="Statistic" android:padding="8dp" android:textStyle="bold" />
-            <TextView android:text="Username" android:padding="8dp" android:textStyle="bold" />
+
+            <TextView
+                android:text="Username"
+                android:padding="8dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="Statistic"
+                android:padding="8dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="Username"
+                android:padding="8dp"
+                android:textStyle="bold" />
         </TableRow>
+
         <TableRow>
-            <TextView android:id="@+id/player1_3dartAvg" android:text="0" android:padding="8dp" />
-            <TextView android:text="3-Dart Avg" android:padding="8dp" />
-            <TextView android:id="@+id/player2_3dartAvg" android:text="0" android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player1_3dartAvg"
+                android:text="0"
+                android:padding="8dp" />
+
+            <TextView
+                android:text="3-Dart Avg"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player2_3dartAvg"
+                android:text="0"
+                android:padding="8dp" />
         </TableRow>
+
         <TableRow>
-            <TextView android:id="@+id/player1_first9Avg" android:text="0" android:padding="8dp" />
-            <TextView android:text="First 9 Avg" android:padding="8dp" />
-            <TextView android:id="@+id/player2_first9Avg" android:text="0" android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player1_first9Avg"
+                android:text="0"
+                android:padding="8dp" />
+
+            <TextView
+                android:text="First 9 Avg"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player2_first9Avg"
+                android:text="0"
+                android:padding="8dp" />
         </TableRow>
+
         <TableRow>
-            <TextView android:id="@+id/player1_bestLeg" android:text="0" android:padding="8dp" />
-            <TextView android:text="Best Leg" android:padding="8dp" />
-            <TextView android:id="@+id/player2_bestLeg" android:text="0" android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player1_bestLeg"
+                android:text="0"
+                android:padding="8dp" />
+
+            <TextView
+                android:text="Best Leg"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player2_bestLeg"
+                android:text="0"
+                android:padding="8dp" />
         </TableRow>
+
         <TableRow>
-            <TextView android:id="@+id/player1_worstLeg" android:text="0" android:padding="8dp" />
-            <TextView android:text="Worst Leg" android:padding="8dp" />
-            <TextView android:id="@+id/player2_worstLeg" android:text="0" android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player1_worstLeg"
+                android:text="0"
+                android:padding="8dp" />
+
+            <TextView
+                android:text="Worst Leg"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player2_worstLeg"
+                android:text="0"
+                android:padding="8dp" />
         </TableRow>
+
         <TableRow>
-            <TextView android:id="@+id/player1_highScore" android:text="0" android:padding="8dp" />
-            <TextView android:text="High Score" android:padding="8dp" />
-            <TextView android:id="@+id/player2_highScore" android:text="0" android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player1_highScore"
+                android:text="0"
+                android:padding="8dp" />
+
+            <TextView
+                android:text="High Score"
+                android:padding="8dp" />
+
+            <TextView
+                android:id="@+id/player2_highScore"
+                android:text="0"
+                android:padding="8dp" />
         </TableRow>
     </TableLayout>
 
