@@ -90,11 +90,6 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = gameRepository.updateTotalLegs(gameId, totalLegs)
-                if (response.isSuccessful) {
-                    //response.body()?.let { updatedGame ->
-                    //    _currentGame.value = updatedGame
-                    //}
-                }
             } catch (e: Exception) {
             }
         }
@@ -105,13 +100,7 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = gameRepository.submitThrow(gameId, score)
-                if (response.isSuccessful) {
-                    //response.body()?.let { updatedGame ->
-                    //    _currentGame.value = updatedGame
-                    //}
-                } else {
-                    // TODO: display error message
-                }
+                //TODO: display error message
             } catch (e: Exception) {
             }
         }
@@ -156,28 +145,34 @@ class GameViewModel : ViewModel() {
     }
 
 
-    fun getBestLegForPlayer(playerId: Long): Long {
-        val game = _currentGame.value ?: return 0
-        return game.legs.minOfOrNull { leg ->
-            val startIndex = leg.startIndex
-            val endIndex = leg.endIndex ?: return@minOfOrNull Long.MAX_VALUE
-            game.rounds
-                .subList(startIndex, endIndex + 1)
-                .count { it.playerId == playerId } * 3L
-        } ?: 0
+    fun getBestLegForPlayer(playerId: Long): String {
+        val game = _currentGame.value ?: return "-"
+        val bestLeg = game.legs
+            .filter { it.winnerPlayerId == playerId }
+            .minOfOrNull { leg ->
+                val startIndex = leg.startIndex
+                val endIndex = leg.endIndex ?: return@minOfOrNull Long.MAX_VALUE
+                game.rounds
+                    .subList(startIndex, endIndex + 1)
+                    .count { it.playerId == playerId } * 3L
+            }
+        return bestLeg?.toString() ?: "-"
     }
 
-    fun getWorstLegForPlayer(playerId: Long): Long {
-        val game = _currentGame.value ?: return 0
-        return game.legs.filter { it.winnerPlayerId == playerId }
+    fun getWorstLegForPlayer(playerId: Long): String {
+        val game = _currentGame.value ?: return "-"
+        val worstLeg = game.legs
+            .filter { it.winnerPlayerId == playerId }
             .maxOfOrNull { leg ->
                 val startIndex = leg.startIndex
                 val endIndex = leg.endIndex ?: return@maxOfOrNull Long.MIN_VALUE
                 game.rounds
                     .subList(startIndex, endIndex + 1)
                     .count { it.playerId == playerId } * 3L
-            } ?: 0
+            }
+        return worstLeg?.toString() ?: "-"
     }
+
 
     fun getHighestScoreForPlayer(playerId: Long): Int {
         val game = _currentGame.value ?: return 0

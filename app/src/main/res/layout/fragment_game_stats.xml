@@ -4,7 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:background="@color/creamy_white">
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="@android:color/white"/>
+        <stroke android:color="@android:color/black" android:width="1dp"/>
+    </shape>
 
     <!-- Header -->
     <TextView
@@ -65,109 +71,162 @@
         android:layout_height="wrap_content"
         android:stretchColumns="*"
         android:layout_gravity="center"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="24dp"
+        android:divider="@android:color/black"
+        android:showDividers="middle">
 
-        <TableRow>
+        <!-- Header Row (Dark Grey) -->
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
+                android:id="@+id/player1TableName"
                 android:text="Username"
                 android:padding="8dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="@color/light_grey"
+                android:layout_marginEnd="1dp"
+                android:textColor="@android:color/white"
+                />
 
             <TextView
                 android:text="Statistic"
                 android:padding="8dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="@color/light_grey"
+                android:layout_marginEnd="1dp"
+                android:textColor="@android:color/white" />
 
             <TextView
+                android:id="@+id/player2TableName"
                 android:text="Username"
                 android:padding="8dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:background="@color/light_grey"
+                android:textColor="@android:color/white" />
         </TableRow>
 
-        <TableRow>
+        <!-- Data Rows (Light Grey) -->
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
                 android:id="@+id/player1_3dartAvg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:text="3-Dart Avg"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/player2_3dartAvg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
                 android:id="@+id/player1_first9Avg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:text="First 9 Avg"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/player2_first9Avg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
                 android:id="@+id/player1_bestLeg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:text="Best Leg"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/player2_bestLeg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
                 android:id="@+id/player1_worstLeg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:text="Worst Leg"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/player2_worstLeg"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray" />
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="1dp">
 
             <TextView
                 android:id="@+id/player1_highScore"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:text="High Score"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/player2_highScore"
                 android:text="0"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:background="@android:color/darker_gray" />
         </TableRow>
     </TableLayout>
+
 </LinearLayout>
