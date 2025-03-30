@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import `is`.hi.darts2.viewmodel.GameViewModel
 import `is`.hi.darts2.R
 import `is`.hi.darts2.model.GameStatus
 import `is`.hi.darts2.ui.game.ongoing.OngoingGameFragment

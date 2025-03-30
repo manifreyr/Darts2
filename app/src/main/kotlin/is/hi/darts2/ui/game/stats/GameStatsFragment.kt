@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import `is`.hi.darts2.R
-import `is`.hi.darts2.viewmodel.GameViewModel
+import `is`.hi.darts2.ui.game.GameViewModel
 import java.util.Locale
 
 class GameStatsFragment : Fragment() {

@@ -1,4 +1,4 @@
-package `is`.hi.darts2.viewmodel
+package `is`.hi.darts2.ui.game
 
 import android.util.Log
 import androidx.lifecycle.LiveData
