@@ -96,13 +96,4 @@
             <TextView android:id="@+id/player2_highScore" android:text="0" android:padding="8dp" />
         </TableRow>
     </TableLayout>
-
-    <!-- Button to Return to Main Menu -->
-    <Button
-        android:id="@+id/btnReturnToMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Return to Menu"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp" />
 </LinearLayout>
