@@ -42,6 +42,9 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Fetches the list of friends and updates the friendsList LiveData.
+     */
     fun fetchFriends() {
         viewModelScope.launch {
             try {
@@ -54,6 +57,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Invites a friend to the current game.
+     * @param friendId The ID of the friend to invite.
+     */
     fun inviteFriend(friendId: Long) {
         viewModelScope.launch {
             try {
@@ -69,10 +76,18 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Sets the game ID.
+     * @param id The game ID.
+     */
     fun setGameId(id: Long) {
         _gameId = id
     }
 
+    /**
+     * Fetches the game details by ID.
+     * @param gameId The ID of the game to fetch.
+     */
     fun fetchGame(gameId: Long) {
         viewModelScope.launch {
             try {
@@ -84,7 +99,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
-
+    /**
+     * Updates the total number of legs in the game.
+     * @param totalLegs The total legs to update.
+     */
     fun updateTotalLegs(totalLegs: Long) {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -95,6 +113,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Submits a dart throw.
+     * @param score The score of the throw.
+     */
     fun submitThrow(score: Long) {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -106,6 +128,9 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Starts the game.
+     */
     fun startGame() {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -118,6 +143,10 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Updates the game type.
+     * @param gameTypeValue The new game type value.
+     */
     fun updateGameType(gameTypeValue: Long) {
         val gameId = _currentGame.value?.id ?: return
         viewModelScope.launch {
@@ -130,6 +159,9 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Fetches the current user data.
+     */
     fun fetchCurrentUser() {
         viewModelScope.launch {
             try {
@@ -144,7 +176,11 @@ class GameViewModel : ViewModel() {
         }
     }
 
-
+    /**
+     * Gets the best leg (fewest darts) for a player.
+     * @param playerId The ID of the player.
+     * @return The best leg as a string.
+     */
     fun getBestLegForPlayer(playerId: Long): String {
         val game = _currentGame.value ?: return "-"
         val bestLeg = game.legs
@@ -159,6 +195,11 @@ class GameViewModel : ViewModel() {
         return bestLeg?.toString() ?: "-"
     }
 
+    /**
+     * Gets the worst leg (most darts) for a player.
+     * @param playerId The ID of the player.
+     * @return The worst leg as a string.
+     */
     fun getWorstLegForPlayer(playerId: Long): String {
         val game = _currentGame.value ?: return "-"
         val worstLeg = game.legs
@@ -173,13 +214,22 @@ class GameViewModel : ViewModel() {
         return worstLeg?.toString() ?: "-"
     }
 
-
+    /**
+     * Gets the highest score for a player.
+     * @param playerId The ID of the player.
+     * @return The highest score.
+     */
     fun getHighestScoreForPlayer(playerId: Long): Int {
         val game = _currentGame.value ?: return 0
         return game.rounds.filter { it.playerId == playerId }
             .maxOfOrNull { it.playerScore } ?: 0
     }
 
+    /**
+     * Gets the first 9-dart average score for a player.
+     * @param playerId The ID of the player.
+     * @return The first 9 dart average score.
+     */
     fun getGameFirst9Average(playerId: Long): Double {
         val game = _currentGame.value ?: return 0.0
         val first3Rounds = game.rounds.filter { it.playerId == playerId }.take(3)
@@ -187,6 +237,11 @@ class GameViewModel : ViewModel() {
         return if (first3Rounds.isNotEmpty()) totalScore / first3Rounds.size else 0.0
     }
 
+    /**
+     * Gets the three-dart average score for a player.
+     * @param playerId The ID of the player.
+     * @return The 3 dart average score.
+     */
     fun getGameThreeDartAverage(playerId: Long): Double {
         val game = _currentGame.value ?: return 0.0
         val playerRounds = game.rounds.filter { it.playerId == playerId }
@@ -195,6 +250,11 @@ class GameViewModel : ViewModel() {
         return if (totalRounds > 0) totalScore / totalRounds else 0.0
     }
 
+
+    /**
+     * Connects to the WebSocket using Stomp.
+     * @param userId The user ID for subscription.
+     */
     fun connectStomp(userId: String) {
         val url = "ws://10.0.2.2:8081/game-websocket"
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
@@ -223,6 +283,10 @@ class GameViewModel : ViewModel() {
         stompClient.connect()
     }
 
+    /**
+     * Subscribes to the user's game updates topic.
+     * @param userId The user ID for subscription.
+     */
     private fun subscribeToUserTopic(userId: String) {
         val subscribe = stompClient.topic("/topic/game-updates/$userId")
             .subscribe({ stompMessage: StompMessage ->
@@ -235,9 +299,12 @@ class GameViewModel : ViewModel() {
             })
     }
 
-    // Cleanup for websockets
+    /**
+     * Cleans up WebSocket connection.
+     */
     override fun onCleared() {
         stompClient.disconnect()
         super.onCleared()
     }
+
 }

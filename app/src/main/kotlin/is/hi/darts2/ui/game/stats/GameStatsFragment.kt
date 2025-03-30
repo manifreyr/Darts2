@@ -53,23 +53,65 @@ class GameStatsFragment : Fragment() {
                 textviewPlayer2Name.text = "${player2.name} : "
 
 
-                textviewPlayer1Score.text = String.format(Locale.getDefault(), "%d", player1.legsWon)
-                textviewPlayer2Score.text = String.format(Locale.getDefault(), "%d", player2.legsWon)
+                textviewPlayer1Score.text =
+                    String.format(Locale.getDefault(), "%d", player1.legsWon)
+                textviewPlayer2Score.text =
+                    String.format(Locale.getDefault(), "%d", player2.legsWon)
 
-                textviewPlayer1ThreeDartAvg.text = String.format(Locale.getDefault(), "%.2f", gameViewModel.getGameThreeDartAverage(player1.id))
-                textviewPlayer2ThreeDartAvg.text = String.format(Locale.getDefault(), "%.2f", gameViewModel.getGameThreeDartAverage(player2.id))
+                textviewPlayer1ThreeDartAvg.text = String.format(
+                    Locale.getDefault(),
+                    "%.2f",
+                    gameViewModel.getGameThreeDartAverage(player1.id)
+                )
+                textviewPlayer2ThreeDartAvg.text = String.format(
+                    Locale.getDefault(),
+                    "%.2f",
+                    gameViewModel.getGameThreeDartAverage(player2.id)
+                )
 
-                textviewPlayer1First9Avg.text = String.format(Locale.getDefault(), "%.2f", gameViewModel.getGameFirst9Average(player1.id))
-                textviewPlayer2First9Avg.text = String.format(Locale.getDefault(), "%.2f", gameViewModel.getGameFirst9Average(player2.id))
+                textviewPlayer1First9Avg.text = String.format(
+                    Locale.getDefault(),
+                    "%.2f",
+                    gameViewModel.getGameFirst9Average(player1.id)
+                )
+                textviewPlayer2First9Avg.text = String.format(
+                    Locale.getDefault(),
+                    "%.2f",
+                    gameViewModel.getGameFirst9Average(player2.id)
+                )
 
-                textviewPlayer1BestLeg.text = String.format(Locale.getDefault(), "%s", gameViewModel.getBestLegForPlayer(player1.id))
-                textviewPlayer2BestLeg.text = String.format(Locale.getDefault(), "%s", gameViewModel.getBestLegForPlayer(player2.id))
+                textviewPlayer1BestLeg.text = String.format(
+                    Locale.getDefault(),
+                    "%s",
+                    gameViewModel.getBestLegForPlayer(player1.id)
+                )
+                textviewPlayer2BestLeg.text = String.format(
+                    Locale.getDefault(),
+                    "%s",
+                    gameViewModel.getBestLegForPlayer(player2.id)
+                )
 
-                textviewPlayer1WorstLeg.text = String.format(Locale.getDefault(), "%s", gameViewModel.getWorstLegForPlayer(player1.id))
-                textviewPlayer2WorstLeg.text = String.format(Locale.getDefault(), "%s", gameViewModel.getWorstLegForPlayer(player2.id))
+                textviewPlayer1WorstLeg.text = String.format(
+                    Locale.getDefault(),
+                    "%s",
+                    gameViewModel.getWorstLegForPlayer(player1.id)
+                )
+                textviewPlayer2WorstLeg.text = String.format(
+                    Locale.getDefault(),
+                    "%s",
+                    gameViewModel.getWorstLegForPlayer(player2.id)
+                )
 
-                textviewPlayer1HighScore.text = String.format(Locale.getDefault(), "%d", gameViewModel.getHighestScoreForPlayer(player1.id))
-                textviewPlayer2HighScore.text = String.format(Locale.getDefault(), "%d", gameViewModel.getHighestScoreForPlayer(player2.id))
+                textviewPlayer1HighScore.text = String.format(
+                    Locale.getDefault(),
+                    "%d",
+                    gameViewModel.getHighestScoreForPlayer(player1.id)
+                )
+                textviewPlayer2HighScore.text = String.format(
+                    Locale.getDefault(),
+                    "%d",
+                    gameViewModel.getHighestScoreForPlayer(player2.id)
+                )
 
                 textviewPlayer1TableName.text = player1.name
                 textviewPlayer2TableName.text = player2.name
@@ -77,7 +119,13 @@ class GameStatsFragment : Fragment() {
         }
     }
 
-    private fun initializeTextView(view: View){
+    /**
+     * Initializes the TextViews for displaying player names, scores, averages,
+     * best and worst legs, high scores, and table names.
+     * @param view The root view containing the TextView elements.
+     */
+
+    private fun initializeTextView(view: View) {
         textviewPlayer1Name = view.findViewById(R.id.player1Name)
         textviewPlayer2Name = view.findViewById(R.id.player2Name)
         textviewPlayer1Score = view.findViewById(R.id.player1Score)

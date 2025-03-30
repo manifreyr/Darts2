@@ -16,6 +16,10 @@ class FriendsViewModel(
     private val _friendRequests = MutableLiveData<List<FriendRequest>>()
     val friendRequests: LiveData<List<FriendRequest>> = _friendRequests
 
+    /**
+     * Fetches incoming friend requests and updates the LiveData.
+     * @param onComplete Callback function to be executed after fetching is complete.
+     */
     fun fetchFriendRequests(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             val response = repository.getIncomingFriendRequests()
@@ -29,6 +33,11 @@ class FriendsViewModel(
         }
     }
 
+    /**
+     * Sends a friend request to a user.
+     * @param identifier The identifier of the user to send a request to.
+     * @param onResult Callback function with success status and message.
+     */
     fun sendFriendRequest(identifier: String, onResult: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             val response = repository.addFriend(identifier)
@@ -39,6 +48,10 @@ class FriendsViewModel(
         }
     }
 
+    /**
+     * Accepts a friend request.
+     * @param requestId The ID of the friend request to accept.
+     */
     fun acceptFriendRequest(requestId: Long) {
         viewModelScope.launch {
             val success = repository.acceptFriendRequest(requestId).isSuccessful
@@ -48,6 +61,10 @@ class FriendsViewModel(
         }
     }
 
+    /**
+     * Declines a friend request.
+     * @param requestId The ID of the friend request to decline.
+     */
     fun declineFriendRequest(requestId: Long) {
         viewModelScope.launch {
             val success = repository.declineFriendRequest(requestId).isSuccessful
