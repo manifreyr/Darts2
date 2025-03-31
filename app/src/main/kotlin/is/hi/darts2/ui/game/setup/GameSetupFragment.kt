@@ -51,6 +51,8 @@ class GameSetupFragment : Fragment() {
             }
         }
 
+        gameViewModel.updatePlayerLocation()
+
         spinnerLegs.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,

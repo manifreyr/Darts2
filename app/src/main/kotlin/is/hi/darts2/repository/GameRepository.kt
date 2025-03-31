@@ -56,4 +56,17 @@ class GameRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun submitThrow(gameId: Long, score: Long): Response<MessageResponse> {
         return apiService.submitThrow(gameId, score)
     }
+    suspend fun setPlayerLocation(
+        gameId: Long,
+        playerId: Long,
+        latitude: Double,
+        longitude: Double
+    ): Response<MessageResponse> {
+        return apiService.setPlayerLocation(gameId, playerId, latitude, longitude)
+    }
+
+    suspend fun getPlayersDistance(gameId: Long): Response<MessageResponse> {
+        return apiService.getPlayerDistance(gameId)
+    }
+
 }

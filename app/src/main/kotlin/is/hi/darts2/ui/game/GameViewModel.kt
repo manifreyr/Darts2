@@ -42,6 +42,50 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun initializeLocationService(context: Context) {
+        locationService = LocationService(context)
+    }
+
+    /**
+     * Uses LocationService to fetch the current location and then calls the repository
+     * to update the player's location.
+     */
+    fun updatePlayerLocation() {
+        if (!::locationService.isInitialized) {
+            Log.e("GameViewModel", "LocationService is not initialized!")
+            return
+        }
+        locationService.getLocation { location ->
+            if (location != null) {
+                viewModelScope.launch {
+                    try {
+                        val gameId = _currentGame.value?.id ?: return@launch
+                        val playerId = currentUser.value?.id ?: return@launch
+                        val response = gameRepository.setPlayerLocation(
+                            gameId,
+                            playerId,
+                            location.latitude,
+                            location.longitude
+                        )
+                        if (response.isSuccessful) {
+                            Log.d("GameViewModel", "Player location updated successfully.")
+                        } else {
+                            Log.e(
+                                "GameViewModel",
+                                "Failed to update location: ${response.errorBody()?.string()}"
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Log.e("GameViewModel", "Exception updating player location", e)
+                    }
+                }
+            } else {
+                Log.e("GameViewModel", "Location is unavailable.")
+            }
+        }
+    }
+
+
     /**
      * Fetches the list of friends and updates the friendsList LiveData.
      */

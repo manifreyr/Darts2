@@ -125,4 +125,17 @@ interface ApiService {
         @Path("gameId") gameId: Long,
         @Body score: Long
     ): Response<MessageResponse>
+
+    @PUT("games/{gameId}/playerLocation")
+    suspend fun setPlayerLocation(
+        @Path("gameId") gameId: Long,
+        @Query("playerId") playerId: Long,
+        @Query("latitude") latitude: Double,
+        @Query("longitude") longitude: Double
+    ): Response<MessageResponse>
+
+    @GET("games/{gameId}/playerLocation")
+    suspend fun getPlayerDistance(
+        @Path("gameId") gameId: Long
+    ): Response<MessageResponse>
 }
