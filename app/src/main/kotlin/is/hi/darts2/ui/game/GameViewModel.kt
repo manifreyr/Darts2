@@ -1,5 +1,6 @@
 package `is`.hi.darts2.ui.game
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,7 @@ import `is`.hi.darts2.model.Game
 import `is`.hi.darts2.model.User
 import `is`.hi.darts2.repository.GameRepository
 import `is`.hi.darts2.repository.UserRepository
+import `is`.hi.darts2.service.LocationService
 import kotlinx.coroutines.launch
 import okhttp3.WebSocket
 import ua.naiksoftware.stomp.Stomp
@@ -21,6 +23,9 @@ class GameViewModel : ViewModel() {
     // Holds the current game.
     private val gameRepository: GameRepository = GameRepository()
     private val userRepository: UserRepository = UserRepository()
+    
+    private lateinit var locationService: LocationService
+
     private val _currentGame = MutableLiveData<Game>()
     val currentGame: LiveData<Game> = _currentGame
     private var _gameId: Long? = null
@@ -41,6 +46,51 @@ class GameViewModel : ViewModel() {
             }
         }
     }
+
+
+    fun initializeLocationService(context: Context) {
+        locationService = LocationService(context)
+    }
+
+    /**
+     * Uses LocationService to fetch the current location and then calls the repository
+     * to update the player's location.
+     */
+    fun updatePlayerLocation() {
+        if (!::locationService.isInitialized) {
+            Log.e("GameViewModel", "LocationService is not initialized!")
+            return
+        }
+        locationService.getLocation { location ->
+            if (location != null) {
+                viewModelScope.launch {
+                    try {
+                        val gameId = _currentGame.value?.id ?: return@launch
+                        val playerId = currentUser.value?.id ?: return@launch
+                        val response = gameRepository.setPlayerLocation(
+                            gameId,
+                            playerId,
+                            location.latitude,
+                            location.longitude
+                        )
+                        if (response.isSuccessful) {
+                            Log.d("GameViewModel", "Player location updated successfully.")
+                        } else {
+                            Log.e(
+                                "GameViewModel",
+                                "Failed to update location: ${response.errorBody()?.string()}"
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Log.e("GameViewModel", "Exception updating player location", e)
+                    }
+                }
+            } else {
+                Log.e("GameViewModel", "Location is unavailable.")
+            }
+        }
+    }
+
 
     /**
      * Fetches the list of friends and updates the friendsList LiveData.

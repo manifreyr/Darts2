@@ -43,6 +43,7 @@ class GameFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        gameViewModel.initializeLocationService(requireContext())
         gameViewModel.currentGame.observe(viewLifecycleOwner) { game ->
             if (game != null) {
                 when (game.status) {

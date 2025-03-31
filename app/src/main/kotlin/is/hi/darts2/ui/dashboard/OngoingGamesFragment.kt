@@ -34,7 +34,7 @@ class OngoingGamesFragment : Fragment() {
         adapter = OngoingGamesAdapter(
             // Placeholder
             onContinueClicked = { game: Game ->
-                dashboardViewModel.navigateToGameScreen(game.id)
+                dashboardViewModel.onSetupGameClicked(game)
             }
         )
         recyclerView.adapter = adapter
