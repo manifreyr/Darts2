@@ -9,12 +9,16 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import `is`.hi.darts2.R
 import `is`.hi.darts2.ui.game.GameViewModel
+import kotlinx.coroutines.launch
 
 class OngoingGameFragment : Fragment() {
 
     private val gameViewModel: GameViewModel by activityViewModels()
+
+    private lateinit var playerDistance: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -30,6 +34,8 @@ class OngoingGameFragment : Fragment() {
         val textViewOpponentScore = view.findViewById<TextView>(R.id.textViewOpponentScore)
         val scoreInputEditText = view.findViewById<EditText>(R.id.scoreInputEditText)
         val submitScoreButton = view.findViewById<Button>(R.id.submitScoreButton)
+        playerDistance = view.findViewById<TextView>(R.id.playerDistance)
+
         gameViewModel.currentGame.observe(viewLifecycleOwner) { game ->
             val currentUser = gameViewModel.currentUser.value
             if (game != null && currentUser != null) {
@@ -48,6 +54,10 @@ class OngoingGameFragment : Fragment() {
                         textViewOpponentName.text = it.name
                         textViewOpponentScore.text = "Score: ${it.score}"
                     }
+                    lifecycleScope.launch {
+                        initializeLocationText() // Calling suspend function in a coroutine
+                    }
+
                 }
             }
         }
@@ -64,5 +74,10 @@ class OngoingGameFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private suspend fun initializeLocationText() {
+        playerDistance.text =
+            "Distance between you and your opponent is: ${gameViewModel.fetchPlayerDistance()}"
     }
 }

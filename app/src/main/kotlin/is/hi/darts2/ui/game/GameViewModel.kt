@@ -1,6 +1,10 @@
 package `is`.hi.darts2.ui.game
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +13,8 @@ import `is`.hi.darts2.model.Game
 import `is`.hi.darts2.model.User
 import `is`.hi.darts2.repository.GameRepository
 import `is`.hi.darts2.repository.UserRepository
+import `is`.hi.darts2.utils.LocationService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.WebSocket
 import ua.naiksoftware.stomp.Stomp
@@ -22,6 +28,8 @@ class GameViewModel : ViewModel() {
     private val gameRepository: GameRepository = GameRepository()
     private val userRepository: UserRepository = UserRepository()
     private val _currentGame = MutableLiveData<Game>()
+    private lateinit var locationService: LocationService
+
     val currentGame: LiveData<Game> = _currentGame
     private var _gameId: Long? = null
 
@@ -55,9 +63,11 @@ class GameViewModel : ViewModel() {
             Log.e("GameViewModel", "LocationService is not initialized!")
             return
         }
+
         locationService.getLocation { location ->
+            print(location)
             if (location != null) {
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     try {
                         val gameId = _currentGame.value?.id ?: return@launch
                         val playerId = currentUser.value?.id ?: return@launch
@@ -68,7 +78,10 @@ class GameViewModel : ViewModel() {
                             location.longitude
                         )
                         if (response.isSuccessful) {
-                            Log.d("GameViewModel", "Player location updated successfully.")
+                            Log.d(
+                                "GameViewModel",
+                                "Player location updated successfully : ${location.latitude}, ${location.longitude}."
+                            )
                         } else {
                             Log.e(
                                 "GameViewModel",
@@ -80,9 +93,25 @@ class GameViewModel : ViewModel() {
                     }
                 }
             } else {
-                Log.e("GameViewModel", "Location is unavailable.")
+                Log.e("GameViewModel", "Failed to retrieve location")
             }
         }
+    }
+
+    suspend fun fetchPlayerDistance(): String {
+        var playerDistance = "Unknown" // Default value if something goes wrong
+        try {
+            val response = gameRepository.getPlayersDistance(_gameId!!)
+
+            if (response.isSuccessful) {
+                playerDistance = response.body()?.message ?: "Unknown"
+            } else {
+                playerDistance = "Error: ${response.message()}" // If the response wasn't successful
+            }
+        } catch (e: Exception) {
+            playerDistance = "Error fetching distance"
+        }
+        return playerDistance
     }
 
 
