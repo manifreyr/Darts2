@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -11,10 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.darts2.R
+import `is`.hi.darts2.ui.MainActivity
+import `is`.hi.darts2.ui.login.LoginFragment
 import `is`.hi.darts2.viewmodel.ProfileViewModel
 
 class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -25,6 +29,7 @@ class ProfileFragment : Fragment() {
         val usernameTextView = view.findViewById<TextView>(R.id.usernameTextView)
         val emailTextView = view.findViewById<TextView>(R.id.emailTextView)
         val idTextView = view.findViewById<TextView>(R.id.idTextView)
+        val logoutButton = view.findViewById<Button>(R.id.logoutButton)
         val friendsRecyclerView = view.findViewById<RecyclerView>(R.id.friendsRecyclerView)
         friendsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ProfileFriendsAdapter { friend ->
@@ -49,7 +54,16 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
+
         viewModel.fetchUser()
         viewModel.fetchFriends()
+
+        logoutButton.setOnClickListener {
+            (activity as? MainActivity)?.hideNavigation()
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoginFragment())
+                .commit()
+        }
     }
 }

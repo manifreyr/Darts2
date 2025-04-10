@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -34,6 +35,8 @@ class OngoingGameFragment : Fragment() {
         val textViewOpponentScore = view.findViewById<TextView>(R.id.textViewOpponentScore)
         val scoreInputEditText = view.findViewById<EditText>(R.id.scoreInputEditText)
         val submitScoreButton = view.findViewById<Button>(R.id.submitScoreButton)
+        val currentUserBox = view.findViewById<LinearLayout>(R.id.currentUserBox)
+        val opponentBox = view.findViewById<LinearLayout>(R.id.opponentBox)
         playerDistance = view.findViewById<TextView>(R.id.playerDistance)
 
         gameViewModel.currentGame.observe(viewLifecycleOwner) { game ->
@@ -48,14 +51,23 @@ class OngoingGameFragment : Fragment() {
 
                     textViewCurrentUserName.text = currentPlayer.name
                     textViewCurrentUserScore.text =
-                        "Score: ${currentPlayer.score}"  // Adjust field names as needed
-
+                        "Score: ${currentPlayer.score}"
                     opponent?.let {
                         textViewOpponentName.text = it.name
                         textViewOpponentScore.text = "Score: ${it.score}"
                     }
+
+                    val isCurrentUserTurn = currentIndex == game.currentPlayerIndex
+                    if (isCurrentUserTurn) {
+                        currentUserBox.setBackgroundResource(R.color.dart_green)
+                        submitScoreButton.isEnabled = true
+                    } else {
+                        opponentBox.setBackgroundResource(R.color.dart_green)
+                        currentUserBox.setBackgroundResource(android.R.color.darker_gray)
+                        submitScoreButton.isEnabled = false
+                    }
                     lifecycleScope.launch {
-                        initializeLocationText() // Calling suspend function in a coroutine
+                        initializeLocationText()
                     }
 
                 }
@@ -63,7 +75,6 @@ class OngoingGameFragment : Fragment() {
         }
 
         submitScoreButton.setOnClickListener {
-            // Get the score input as a string, trim any extra spaces.
             val scoreText = scoreInputEditText.text.toString().trim()
             if (scoreText.isNotEmpty()) {
                 val score = scoreText.toLongOrNull()

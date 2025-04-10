@@ -15,6 +15,7 @@
 
         <!-- Current User Box -->
         <LinearLayout
+            android:id="@+id/currentUserBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,6 +41,7 @@
 
         <!-- Opponent Box -->
         <LinearLayout
+            android:id="@+id/opponentBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

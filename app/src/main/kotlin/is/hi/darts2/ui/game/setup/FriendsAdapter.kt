@@ -33,6 +33,7 @@ class FriendsAdapter(
         fun bind(user: User) {
             friendNameTextView.text = user.displayName
             inviteButton.setOnClickListener {
+                inviteButton.text = "Invited"
                 onInviteClick(user)
             }
         }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -35,7 +36,17 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+    }
+}
+
+
 dependencies {
+    implementation("androidx.room:room-runtime-android:${libs.versions.roomRuntimeAndroid.get()}")
+    kapt("androidx.room:room-compiler:${libs.versions.roomCompiler.get()}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
@@ -58,6 +69,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.play.services.location)
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
