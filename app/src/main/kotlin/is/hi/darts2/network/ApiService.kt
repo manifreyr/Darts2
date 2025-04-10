@@ -138,4 +138,7 @@ interface ApiService {
     suspend fun getPlayerDistance(
         @Path("gameId") gameId: Long
     ): Response<MessageResponse>
+
+    @GET("player/leaderboard")
+    suspend fun getLeaderboardStats(): Response<List<Map<String, Any>>>
 }

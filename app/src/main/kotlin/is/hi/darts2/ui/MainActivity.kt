@@ -9,6 +9,7 @@ import `is`.hi.darts2.ui.friends.FriendsFragment
 import `is`.hi.darts2.ui.navigation.NavigationFragment
 import android.util.Log
 import android.view.View
+import `is`.hi.darts2.ui.leaderboard.LeaderboardFragment
 import `is`.hi.darts2.ui.dashboard.DashboardFragment
 import `is`.hi.darts2.ui.profile.ProfileFragment
 
@@ -55,9 +56,9 @@ class MainActivity : AppCompatActivity(), NavigationFragment.NavigationListener 
             }
 
             2 -> {
-                //supportFragmentManager.beginTransaction()
-                //    .replace(R.id.fragment_container, LeaderboardFragment())
-                //    .commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, LeaderboardFragment())
+                    .commit()
             }
 
             3 -> {

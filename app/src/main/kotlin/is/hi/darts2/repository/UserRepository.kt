@@ -44,4 +44,8 @@ class UserRepository(private val apiService: ApiService = Network.apiService) {
     suspend fun removeFriend(friendId: Long): Response<MessageResponse> {
         return apiService.removeFriend(friendId)
     }
+
+    suspend fun getLeaderboardStats(): Response<List<Map<String, Any>>> {
+        return apiService.getLeaderboardStats()
+    }
 }
